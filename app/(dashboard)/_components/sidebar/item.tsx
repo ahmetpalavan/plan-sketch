@@ -1,10 +1,10 @@
 'use client';
 
+import { useOrganization, useOrganizationList } from '@clerk/nextjs';
 import Image from 'next/image';
-import { useUser, useOrganizationList, useOrganization } from '@clerk/nextjs';
-import { cn } from '~/lib/utils';
 import { useCallback } from 'react';
 import { Hint } from '~/components/hint';
+import { cn } from '~/lib/utils';
 
 type Props = {
   id: string;
