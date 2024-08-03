@@ -24,7 +24,7 @@ export default function RootLayout({
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
           <ConvexClientProvider>
             <QueryProvider>
-              <Toaster />
+              <Toaster richColors />
               {children}
             </QueryProvider>
           </ConvexClientProvider>

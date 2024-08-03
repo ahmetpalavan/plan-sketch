@@ -20,7 +20,6 @@ export const create = mutation({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    console.log('🚀 ~ handler ~ identity:', identity);
 
     if (!identity) {
       throw new Error('Unauthorized');
@@ -36,5 +35,18 @@ export const create = mutation({
     });
 
     return board;
+  },
+});
+
+export const remove = mutation({
+  args: {
+    id: v.id('board'),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error('Unauthorized');
+    }
+    await ctx.db.delete(args.id);
   },
 });

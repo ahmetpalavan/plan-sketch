@@ -51,7 +51,6 @@ export const BoardList: FC<BoardListProps> = ({ query, orgId }) => {
     return <EmptyBoard />;
   }
 
-  console.log('🚀 ~ data:', data);
   return (
     <div>
       <h2 className='text-3xl'>{query.favorites ? 'Favorite boards' : 'Boards'}</h2>
