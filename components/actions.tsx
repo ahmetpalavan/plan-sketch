@@ -9,6 +9,9 @@ import { useApiMutation } from '~/hooks/use-api-mutation';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { Button } from './ui/button';
 import { useRenameModal } from '~/hooks/use-rename-modal';
+import { useMutation } from '@tanstack/react-query';
+import { Id } from '~/convex/_generated/dataModel';
+import { convex } from '~/providers/convex-client-provider';
 
 interface ActionProps {
   children: React.ReactNode;
@@ -20,17 +23,20 @@ interface ActionProps {
 
 export const Action = ({ children, side, sideOffset, id, title }: ActionProps) => {
   const { onOpen } = useRenameModal();
-  const { mutate, pending } = useApiMutation(api.board.remove);
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: () => convex.mutation(api.board.remove, { id: id as Id<'board'> }),
+    onSuccess: () => {
+      toast.success('Board deleted');
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   const handleDelete = useCallback(() => {
-    mutate({ id })
-      .then(() => {
-        toast.success(`Board "${title}" deleted`);
-      })
-      .catch(() => {
-        toast.error(`Failed to delete board "${title}"`);
-      });
-  }, [id, mutate]);
+    mutate();
+  }, []);
 
   const handleCopyLink = useCallback(() => {
     navigator.clipboard
@@ -63,7 +69,7 @@ export const Action = ({ children, side, sideOffset, id, title }: ActionProps) =
           Rename
         </DropdownMenuItem>
         <ConfirmModal
-          disabled={pending}
+          disabled={isPending}
           header='Delete Board'
           description='Are you sure you want to delete this board?'
           onConfirm={handleDelete}
