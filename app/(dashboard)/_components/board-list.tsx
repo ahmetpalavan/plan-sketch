@@ -1,14 +1,13 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import { Search, Star } from 'lucide-react';
 import { FC } from 'react';
-import { api } from '~/convex/_generated/api';
-import { convex } from '~/providers/convex-client-provider';
+import { BoardCard } from './board-card';
 import { Empty } from './empty';
 import { EmptyBoard } from './empty-board';
-import { BoardCard } from './board-card';
 import { NewBoardButton } from './new-board-button';
+import { useQuery } from 'convex/react';
+import { api } from '~/convex/_generated/api';
 
 interface BoardListProps {
   query: {
@@ -19,10 +18,7 @@ interface BoardListProps {
 }
 
 export const BoardList: FC<BoardListProps> = ({ query, orgId }) => {
-  const { data, isLoading, status } = useQuery({
-    queryKey: ['boards', orgId],
-    queryFn: () => convex.query(api.boards.get, { orgId }),
-  });
+  const data = useQuery(api.boards.get, { orgId });
 
   if (data === undefined) {
     return (
