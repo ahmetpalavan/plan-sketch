@@ -1,4 +1,5 @@
 import { Star } from 'lucide-react';
+import { useCallback } from 'react';
 import { cn } from '~/lib/utils';
 
 interface FooterProps {
@@ -11,6 +12,15 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ title, authorLabel, createdAtLabel, isFavorite, onClick, disabled }) => {
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.stopPropagation();
+      event.preventDefault();
+      onClick();
+    },
+    [onClick]
+  );
+
   return (
     <div className='relative p-3'>
       <p className='text-sm text-muted-foreground truncate max-w-[calc(100%-20px)]'>{title}</p>
@@ -22,7 +32,7 @@ export const Footer: React.FC<FooterProps> = ({ title, authorLabel, createdAtLab
           'opacity-0 group-hover:opacity-100 transition absolute top-3 right-3 text-muted-foreground hover:text-blue-600',
           disabled && 'cursor-not-allowed opacity-75'
         )}
-        onClick={onClick}
+        onClick={handleClick}
         disabled={disabled}
       >
         <Star className={cn('w-5 h-5', isFavorite && 'fill-blue-600 text-blue-600')} />

@@ -31,7 +31,7 @@ export const NewBoardButton: React.FC<NewBoardButtonProps> = ({ orgId, disabled 
       disabled={disabled || isPending}
       onClick={onClick}
       className={cn(
-        'col-span-1 group aspect-[100/127] border rounded-lg flex flex-col items-center justify-center py-6 bg-blue-600 hover:bg-blue-900',
+        'col-span-1 group aspect-[100/127] border rounded-lg flex flex-col items-center justify-center py-6 from-yellow-700 to-yellow-300 bg-gradient-to-t transition-opacity duration-200 hover:opacity-90',
         (disabled || isPending) && 'opacity-75'
       )}
     >

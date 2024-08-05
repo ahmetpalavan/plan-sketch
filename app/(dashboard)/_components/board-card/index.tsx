@@ -1,12 +1,18 @@
-import { Skeleton } from '~/components/ui/skeleton';
+import { useAuth } from '@clerk/nextjs';
+import { useMutation } from '@tanstack/react-query';
 import { formatDistanceToNow } from 'date-fns';
+import { MoreHorizontal } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Overlay } from './overlay';
-import { useAuth } from '@clerk/nextjs';
-import { Footer } from './footer';
+import { useCallback } from 'react';
+import { toast } from 'sonner';
 import { Action } from '~/components/actions';
-import { MoreHorizontal } from 'lucide-react';
+import { Skeleton } from '~/components/ui/skeleton';
+import { api } from '~/convex/_generated/api';
+import { Id } from '~/convex/_generated/dataModel';
+import { convex } from '~/providers/convex-client-provider';
+import { Footer } from './footer';
+import { Overlay } from './overlay';
 
 interface BoardCardProps {
   id: string;
@@ -19,11 +25,48 @@ interface BoardCardProps {
   isFavorite: boolean;
 }
 
-export const BoardCard = ({ id, title, imageUrl, authorId, authorName, createdAt, isFavorite }: BoardCardProps) => {
+export const BoardCard = ({ id, title, imageUrl, authorId, authorName, createdAt, isFavorite, orgId }: BoardCardProps) => {
   const { userId } = useAuth();
 
   const isAuthor = userId === authorId ? 'You' : authorName;
   const createdAtLabel = formatDistanceToNow(createdAt, { addSuffix: true });
+
+  const { mutate: favorite, isPending: isFavoritePending } = useMutation({
+    mutationFn: () => {
+      return convex.mutation(api.board.favorite, {
+        id: id as Id<'board'>,
+        orgId: orgId,
+      });
+    },
+    onSuccess: () => {
+      toast.success('Board favorited');
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const { mutate: unfavorite, isPending: isUnfavoritePending } = useMutation({
+    mutationFn: () => {
+      return convex.mutation(api.board.unfavorite, {
+        id: id as Id<'board'>,
+      });
+    },
+    onSuccess: () => {
+      toast.error('Board unfavorited');
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const toggleFavorite = useCallback(() => {
+    if (isFavorite) {
+      unfavorite();
+    } else {
+      favorite();
+    }
+  }, [isFavorite, favorite, unfavorite]);
 
   return (
     <Link href={`/board/${id}`}>
@@ -42,8 +85,8 @@ export const BoardCard = ({ id, title, imageUrl, authorId, authorName, createdAt
           authorLabel={isAuthor}
           createdAtLabel={createdAtLabel}
           isFavorite={isFavorite}
-          onClick={() => {}}
-          disabled={false}
+          onClick={toggleFavorite}
+          disabled={isFavoritePending || isUnfavoritePending}
         />
       </div>
     </Link>

@@ -1,13 +1,13 @@
 'use client';
 
+import { useQuery } from 'convex/react';
 import { Search, Star } from 'lucide-react';
 import { FC } from 'react';
+import { api } from '~/convex/_generated/api';
 import { BoardCard } from './board-card';
 import { Empty } from './empty';
 import { EmptyBoard } from './empty-board';
 import { NewBoardButton } from './new-board-button';
-import { useQuery } from 'convex/react';
-import { api } from '~/convex/_generated/api';
 
 interface BoardListProps {
   query: {
@@ -62,7 +62,7 @@ export const BoardList: FC<BoardListProps> = ({ query, orgId }) => {
             orgId={board.orgId}
             authorName={board.authorName}
             createdAt={board._creationTime}
-            isFavorite={false}
+            isFavorite={board.isFavorite}
           />
         ))}
       </div>
