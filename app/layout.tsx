@@ -5,6 +5,7 @@ import './globals.css';
 import { ThemeProvider } from '~/providers/theme-provider';
 import { Toaster } from '~/components/ui/sonner';
 import QueryProvider from '~/providers/query-provider';
+import { ModalProvider } from '~/providers/modal-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
           <ConvexClientProvider>
             <QueryProvider>
+              <ModalProvider />
               <Toaster richColors />
               {children}
             </QueryProvider>
