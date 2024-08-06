@@ -3,6 +3,7 @@
 import { useOrganization } from '@clerk/nextjs';
 import { useMutation } from 'convex/react';
 import { Notebook } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { toast } from 'sonner';
 import { Button } from '~/components/ui/button';
@@ -10,6 +11,7 @@ import { api } from '~/convex/_generated/api';
 import { useApiMutation } from '~/hooks/use-api-mutation';
 
 export const EmptyBoard = () => {
+  const router = useRouter();
   const { organization } = useOrganization();
   const { mutate, pending } = useApiMutation(api.board.create);
 
@@ -21,8 +23,9 @@ export const EmptyBoard = () => {
       orgId: organization.id,
       title: 'New board',
     })
-      .then(() => {
+      .then((id) => {
         toast.success('Board created');
+        router.push(`/board/${id}`);
       })
       .catch(() => {
         toast.error('Failed to create board');

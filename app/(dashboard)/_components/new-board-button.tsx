@@ -5,6 +5,7 @@ import { api } from '~/convex/_generated/api';
 import { useMutation } from '@tanstack/react-query';
 import { cn } from '~/lib/utils';
 import { convex } from '~/providers/convex-client-provider';
+import { useRouter } from 'next/navigation';
 
 type NewBoardButtonProps = {
   orgId: string;
@@ -12,10 +13,12 @@ type NewBoardButtonProps = {
 };
 
 export const NewBoardButton: React.FC<NewBoardButtonProps> = ({ orgId, disabled }) => {
+  const router = useRouter();
   const { mutate, isPending } = useMutation({
     mutationFn: () => convex.mutation(api.board.create, { orgId, title: 'New board' }),
-    onSuccess: () => {
+    onSuccess: (id) => {
       toast.success('Board created');
+      router.push(`/board/${id}`);
     },
     onError: (error) => {
       toast.error(error.message);
