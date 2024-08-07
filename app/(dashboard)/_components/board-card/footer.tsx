@@ -23,8 +23,8 @@ export const Footer: React.FC<FooterProps> = ({ title, authorLabel, createdAtLab
 
   return (
     <div className='relative p-3'>
-      <p className='text-sm text-muted-foreground truncate max-w-[calc(100%-20px)]'>{title}</p>
-      <p className='opacity-0 group-hover:opacity-100 transition-opacity text-xs text-muted-foreground truncate'>
+      <p className='text-sm text-muted-foreground dark:text-white truncate max-w-[calc(100%-20px)]'>{title}</p>
+      <p className='opacity-0 group-hover:opacity-100 transition-opacity text-xs text-muted-foreground dark:text-white truncate'>
         {authorLabel}, {createdAtLabel}
       </p>
       <button
