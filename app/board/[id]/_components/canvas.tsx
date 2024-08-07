@@ -67,17 +67,27 @@ export const Canvas = ({ boardId }: Props) => {
     [history]
   );
 
-  const pointerUp = useMutation(
+  const unSelectLayer = useMutation(({ setMyPresence, self }) => {
+    if (self.presence.selection.length > 0) {
+      setMyPresence({ selection: [] }, { addToHistory: true });
+    }
+  }, []);
+
+  const onPointerUp = useMutation(
     ({ setMyPresence }, e) => {
       const point = pointerEventToCanvasPoint(e, camera);
-      if (canvasState.mode === CanvasMode.Inserting) {
+
+      if (canvasState.mode === CanvasMode.None || canvasState.mode === CanvasMode.Pressing) {
+        unSelectLayer();
+        setCanvasState({ mode: CanvasMode.None });
+      } else if (canvasState.mode === CanvasMode.Inserting) {
         insertLayer(canvasState.layerType, point);
       } else {
         setCanvasState({ mode: CanvasMode.None });
       }
       history.resume();
     },
-    [camera, canvasState.mode]
+    [camera, canvasState.mode, insertLayer, history, unSelectLayer]
   );
 
   const selections = useOthersMapped((other) => other.presence.selection);
@@ -117,13 +127,43 @@ export const Canvas = ({ boardId }: Props) => {
     [canvasState]
   );
 
+  const translateSelectedLayer = useMutation(
+    ({ storage, self }, point: Point) => {
+      if (canvasState.mode !== CanvasMode.Translating) {
+        return;
+      }
+      const offset = {
+        x: point.x - canvasState.current.x,
+        y: point.y - canvasState.current.y,
+      };
+
+      const livelayers = storage.get('layers');
+      for (const layerId of self.presence.selection) {
+        const layer = livelayers.get(layerId);
+        if (layer) {
+          layer.update({
+            x: layer.get('x') + offset.x,
+            y: layer.get('y') + offset.y,
+          });
+        }
+      }
+
+      setCanvasState({ mode: CanvasMode.Translating, current: point });
+    },
+    [canvasState]
+  );
+
   const onPointerMove: React.PointerEventHandler<SVGSVGElement> = useMutation(
     ({ setMyPresence }, e) => {
       e.preventDefault();
       const current = pointerEventToCanvasPoint(e, camera);
-      if (canvasState.mode === CanvasMode.Resizing) {
+
+      if (canvasState.mode === CanvasMode.Translating) {
+        translateSelectedLayer(current);
+      } else if (canvasState.mode === CanvasMode.Resizing) {
         resizeLayer(current);
       }
+
       setMyPresence({ cursor: current });
     },
     [canvasState, resizeLayer, camera]
@@ -132,6 +172,18 @@ export const Canvas = ({ boardId }: Props) => {
   const onPointerLeave: React.PointerEventHandler<SVGSVGElement> = useMutation(({ self, setMyPresence }) => {
     setMyPresence({ cursor: null });
   }, []);
+
+  const onPointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      if (canvasState.mode === CanvasMode.Inserting) {
+        return;
+      }
+      e.preventDefault();
+      const point = pointerEventToCanvasPoint(e, camera);
+      setCanvasState({ mode: CanvasMode.Pressing, origin: point });
+    },
+    [canvasState.mode, camera, setCanvasState]
+  );
 
   const onLayerPointDown = useMutation(
     ({ setMyPresence, self }, e: React.PointerEvent, id: string) => {
@@ -167,10 +219,11 @@ export const Canvas = ({ boardId }: Props) => {
         canRedo={canRedo}
       />
       <svg
-        onPointerUp={pointerUp}
+        onPointerUp={onPointerUp}
         onPointerLeave={onPointerLeave}
         onWheel={onWheel}
         onPointerMove={onPointerMove}
+        onPointerDown={onPointerDown}
         className='h-[100vh] w-[100vw]'
       >
         <g style={{ transform: `translate(${camera.x}px, ${camera.y}px)` }}>
