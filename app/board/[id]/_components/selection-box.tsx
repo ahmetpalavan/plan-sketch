@@ -14,7 +14,6 @@ const HANDLE_WIDTH = 8;
 export const SelectionBox = memo(({ onResizeHandlePointerDown }: SelectionBoxProps) => {
   const soleLayerId = useSelf((me) => (me.presence.selection.length === 1 ? me.presence.selection[0] : null));
   const isShowingHandles = useStorage((state) => soleLayerId && state.layers.get(soleLayerId)?.type !== LayerType.Path);
-  console.log('🚀 ~ SelectionBox ~ isShowingHandles:', isShowingHandles);
   const bounds = useSelectionBound();
 
   if (!bounds) {
