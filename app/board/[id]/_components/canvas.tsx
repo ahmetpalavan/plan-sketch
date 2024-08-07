@@ -4,9 +4,9 @@ import { LiveObject } from '@liveblocks/client';
 import { useCanRedo, useCanUndo, useHistory, useOthersMapped } from '@liveblocks/react';
 import { nanoid } from 'nanoid';
 import React, { useCallback, useMemo, useState } from 'react';
-import { connectionIdColor, pointerEventToCanvasPoint } from '~/lib/utils';
+import { connectionIdColor, pointerEventToCanvasPoint, resizeBounds } from '~/lib/utils';
 import { useMutation, useStorage } from '~/liveblocks.config';
-import { CanvasMode, CanvasState, Color, LayerType, Point } from '~/types/canvas';
+import { CanvasMode, CanvasState, Color, LayerType, Point, Side, XYWH } from '~/types/canvas';
 import { CursorsPresence } from './cursors-presence';
 import { Info } from './info';
 import { Participants } from './participants';
@@ -22,7 +22,6 @@ const MAX_LAYERS = 100;
 
 export const Canvas = ({ boardId }: Props) => {
   const layerIds = useStorage((state) => state.layerIds);
-
   const [canvasState, setCanvasState] = useState<CanvasState>({ mode: CanvasMode.None });
   const [camera, setCamera] = useState({ x: 0, y: 0 });
   const [lastUsedColor, setLastUsedColor] = useState<Color>({ b: 0, g: 0, r: 0 });
@@ -54,6 +53,18 @@ export const Canvas = ({ boardId }: Props) => {
       setCanvasState({ mode: CanvasMode.None });
     },
     [lastUsedColor]
+  );
+
+  const onResizeHandlePointerDown = useCallback(
+    (corner: Side, initialBounds: XYWH) => {
+      history.pause();
+      setCanvasState({
+        mode: CanvasMode.Resizing,
+        corner,
+        initialBounds,
+      });
+    },
+    [history]
   );
 
   const pointerUp = useMutation(
@@ -90,11 +101,33 @@ export const Canvas = ({ boardId }: Props) => {
     }));
   }, []);
 
-  const onPointerMove: React.PointerEventHandler<SVGSVGElement> = useMutation(({ setMyPresence }, e) => {
-    e.preventDefault();
-    const current = pointerEventToCanvasPoint(e, camera);
-    setMyPresence({ cursor: current });
-  }, []);
+  const resizeLayer = useMutation(
+    ({ storage, self }, point: Point) => {
+      if (canvasState.mode !== CanvasMode.Resizing) {
+        return;
+      }
+      const initialBounds = resizeBounds(canvasState.corner, canvasState.initialBounds, point);
+
+      const liveLayers = storage.get('layers');
+      const layers = liveLayers.get(self.presence.selection[0]);
+      if (layers) {
+        layers.update(initialBounds);
+      }
+    },
+    [canvasState]
+  );
+
+  const onPointerMove: React.PointerEventHandler<SVGSVGElement> = useMutation(
+    ({ setMyPresence }, e) => {
+      e.preventDefault();
+      const current = pointerEventToCanvasPoint(e, camera);
+      if (canvasState.mode === CanvasMode.Resizing) {
+        resizeLayer(current);
+      }
+      setMyPresence({ cursor: current });
+    },
+    [canvasState, resizeLayer, camera]
+  );
 
   const onPointerLeave: React.PointerEventHandler<SVGSVGElement> = useMutation(({ self, setMyPresence }) => {
     setMyPresence({ cursor: null });
@@ -149,7 +182,7 @@ export const Canvas = ({ boardId }: Props) => {
               key={layerId}
             />
           ))}
-          <SelectionBox onResizeHandlePointerDown={() => {}} />
+          <SelectionBox onResizeHandlePointerDown={onResizeHandlePointerDown} />
           <CursorsPresence />
         </g>
       </svg>

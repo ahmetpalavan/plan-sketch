@@ -35,7 +35,7 @@ export const Action = ({ children, side, sideOffset, id, title }: ActionProps) =
 
   const handleDelete = useCallback(() => {
     mutate();
-  }, []);
+  }, [mutate]);
 
   const handleCopyLink = useCallback(() => {
     navigator.clipboard

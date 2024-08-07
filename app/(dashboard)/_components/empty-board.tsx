@@ -1,7 +1,6 @@
 'use client';
 
 import { useOrganization } from '@clerk/nextjs';
-import { useMutation } from 'convex/react';
 import { Notebook } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
@@ -30,7 +29,7 @@ export const EmptyBoard = () => {
       .catch(() => {
         toast.error('Failed to create board');
       });
-  }, [mutate, organization]);
+  }, [mutate, organization, router]);
 
   return (
     <div className='flex flex-col items-center justify-center h-[calc(100%-80px)]'>

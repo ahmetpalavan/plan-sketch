@@ -23,7 +23,7 @@ export const SidebarItem = ({ id, name, imageUrl }: Props) => {
     setActive?.({
       organization: id,
     });
-  }, []);
+  }, [id, isActive, setActive]);
 
   return (
     <div className='aspect-square relative'>
