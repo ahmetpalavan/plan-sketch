@@ -36,101 +36,92 @@ export const SelectionBox = memo(({ onResizeHandlePointerDown }: SelectionBoxPro
       {isShowingHandles && (
         <>
           <rect
-            x={0}
-            y={0}
-            onPointerDown={(e) => e.stopPropagation()}
+            className='fill-white stroke-blue-500 stroke-1 pointer-events-auto'
             style={{
+              transform: `translate(${bounds.x - HANDLE_WIDTH / 2}px, ${bounds.y - HANDLE_WIDTH / 2}px)`,
               cursor: 'nwse-resize',
-              width: `${HANDLE_WIDTH}px`,
-              height: `${HANDLE_WIDTH}px`,
-              transform: `translate(${bounds.x - HANDLE_WIDTH / 2}px, ${bounds.y - HANDLE_WIDTH}px)`,
             }}
-            className='stroke-1 dark:fill-white stroke-blue-500 fill-red-500'
-          />
-          <rect
             x={0}
             y={0}
-            onPointerDown={(e) => e.stopPropagation()}
+            width={HANDLE_WIDTH}
+            height={HANDLE_WIDTH}
+          />
+          <rect
+            className='fill-white stroke-blue-500 stroke-1 pointer-events-auto'
             style={{
+              transform: `translate(${bounds.x + bounds.width - HANDLE_WIDTH / 2}px, ${bounds.y - HANDLE_WIDTH / 2}px)`,
               cursor: 'nesw-resize',
-              width: `${HANDLE_WIDTH}px`,
-              height: `${HANDLE_WIDTH}px`,
-              transform: `translate(${bounds.x + bounds.width - HANDLE_WIDTH / 2}px, ${bounds.y - HANDLE_WIDTH}px)`,
             }}
-            className='stroke-1 dark:fill-white stroke-blue-500 fill-red-500'
-          />
-          <rect
             x={0}
             y={0}
-            onPointerDown={(e) => e.stopPropagation()}
+            width={HANDLE_WIDTH}
+            height={HANDLE_WIDTH}
+          />
+          <rect
+            className='fill-white stroke-blue-500 stroke-1 pointer-events-auto'
             style={{
+              transform: `translate(${bounds.x - HANDLE_WIDTH / 2}px, ${bounds.y + bounds.height - HANDLE_WIDTH / 2}px)`,
               cursor: 'nesw-resize',
-              width: `${HANDLE_WIDTH}px`,
-              height: `${HANDLE_WIDTH}px`,
-              transform: `translate(${bounds.x - HANDLE_WIDTH / 2}px, ${bounds.y + bounds.height - HANDLE_WIDTH}px)`,
             }}
-            className='stroke-1 dark:fill-white stroke-blue-500 fill-gray-500'
-          />
-          <rect
             x={0}
             y={0}
-            onPointerDown={(e) => e.stopPropagation()}
+            width={HANDLE_WIDTH}
+            height={HANDLE_WIDTH}
+          />
+          <rect
+            className='fill-white stroke-blue-500 stroke-1 pointer-events-auto'
             style={{
+              transform: `translate(${bounds.x + bounds.width - HANDLE_WIDTH / 2}px, ${bounds.y + bounds.height - HANDLE_WIDTH / 2}px)`,
               cursor: 'nwse-resize',
-              width: `${HANDLE_WIDTH}px`,
-              height: `${HANDLE_WIDTH}px`,
-              transform: `translate(${bounds.x + bounds.width - HANDLE_WIDTH / 2}px, ${bounds.y + bounds.height - HANDLE_WIDTH}px)`,
             }}
-            className='stroke-1 dark:fill-white stroke-blue-500 fill-gray-500'
-          />
-
-          <rect
             x={0}
             y={0}
-            onPointerDown={(e) => e.stopPropagation()}
-            style={{
-              cursor: 'ew-resize',
-              width: `${HANDLE_WIDTH}px`,
-              height: `${HANDLE_WIDTH}px`,
-              transform: `translate(${bounds.x + bounds.width / 2 - HANDLE_WIDTH / 2}px, ${bounds.y - HANDLE_WIDTH}px)`,
-            }}
-            className='stroke-1 dark:fill-white stroke-blue-500 fill-gray-500'
+            width={HANDLE_WIDTH}
+            height={HANDLE_WIDTH}
           />
           <rect
-            x={0}
-            y={0}
-            onPointerDown={(e) => e.stopPropagation()}
+            className='fill-white stroke-blue-500 stroke-1 pointer-events-auto'
             style={{
-              cursor: 'ew-resize',
-              width: `${HANDLE_WIDTH}px`,
-              height: `${HANDLE_WIDTH}px`,
-              transform: `translate(${bounds.x + bounds.width / 2 - HANDLE_WIDTH / 2}px, ${bounds.y + bounds.height - HANDLE_WIDTH}px)`,
-            }}
-            className='stroke-1 dark:fill-white stroke-blue-500 fill-gray-500'
-          />
-          <rect
-            x={0}
-            y={0}
-            onPointerDown={(e) => e.stopPropagation()}
-            style={{
+              transform: `translate(${bounds.x + bounds.width / 2 - HANDLE_WIDTH / 2}px, ${bounds.y - HANDLE_WIDTH / 2}px)`,
               cursor: 'ns-resize',
-              width: `${HANDLE_WIDTH}px`,
-              height: `${HANDLE_WIDTH}px`,
-              transform: `translate(${bounds.x - HANDLE_WIDTH}px, ${bounds.y + bounds.height / 2 - HANDLE_WIDTH / 2}px)`,
             }}
-            className='stroke-1 dark:fill-white stroke-blue-500 fill-gray-500'
-          />
-          <rect
             x={0}
             y={0}
-            onPointerDown={(e) => e.stopPropagation()}
+            width={HANDLE_WIDTH}
+            height={HANDLE_WIDTH}
+          />
+          <rect
+            className='fill-white stroke-blue-500 stroke-1 pointer-events-auto'
             style={{
+              transform: `translate(${bounds.x + bounds.width / 2 - HANDLE_WIDTH / 2}px, ${bounds.y + bounds.height - HANDLE_WIDTH / 2}px)`,
               cursor: 'ns-resize',
-              width: `${HANDLE_WIDTH}px`,
-              height: `${HANDLE_WIDTH}px`,
-              transform: `translate(${bounds.x + bounds.width - HANDLE_WIDTH}px, ${bounds.y + bounds.height / 2 - HANDLE_WIDTH / 2}px)`,
             }}
-            className='stroke-1 dark:fill-white stroke-blue-500 fill-gray-500'
+            x={0}
+            y={0}
+            width={HANDLE_WIDTH}
+            height={HANDLE_WIDTH}
+          />
+          <rect
+            className='fill-white stroke-blue-500 stroke-1 pointer-events-auto'
+            style={{
+              transform: `translate(${bounds.x - HANDLE_WIDTH / 2}px, ${bounds.y + bounds.height / 2 - HANDLE_WIDTH / 2}px)`,
+              cursor: 'ew-resize',
+            }}
+            x={0}
+            y={0}
+            width={HANDLE_WIDTH}
+            height={HANDLE_WIDTH}
+          />
+          <rect
+            className='fill-white stroke-blue-500 stroke-1 pointer-events-auto'
+            style={{
+              transform: `translate(${bounds.x + bounds.width - HANDLE_WIDTH / 2}px, ${bounds.y + bounds.height / 2 - HANDLE_WIDTH / 2}px)`,
+              cursor: 'ew-resize',
+            }}
+            x={0}
+            y={0}
+            width={HANDLE_WIDTH}
+            height={HANDLE_WIDTH}
           />
         </>
       )}
