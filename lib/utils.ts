@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from 'clsx';
 import React, { useCallback } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { Camera, Color, Point, Side, XYWH } from '~/types/canvas';
+import { Camera, Color, Layer, Point, Side, XYWH } from '~/types/canvas';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -53,4 +53,29 @@ export function resizeBounds(corner: Side, initialBounds: XYWH, point: Point) {
   }
 
   return result;
+}
+
+export function findIntersectingLayersWithRectangle(layerIds: readonly string[], layers: ReadonlyMap<string, Layer>, a: Point, b: Point) {
+  const rect = {
+    x: Math.min(a.x, b.x),
+    y: Math.min(a.y, b.y),
+    width: Math.abs(a.x - b.x),
+    height: Math.abs(a.y - b.y),
+  };
+
+  return layerIds.filter((layerId) => {
+    const layer = layers.get(layerId);
+    if (!layer) {
+      return;
+    }
+
+    return (
+      layer.x < rect.x + rect.width && layer.x + layer.width > rect.x && layer.y < rect.y + rect.height && layer.y + layer.height > rect.y
+    );
+  });
+}
+
+export function getContrastingTextColor(color: Color) {
+  const luminance = 0.299 * color.r + 0.587 * color.g + 0.114 * color.b;
+  return luminance > 182 ? 'black' : 'white';
 }
