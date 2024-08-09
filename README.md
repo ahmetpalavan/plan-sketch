@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Plan Sketch
 
-## Getting Started
+Plan Sketch is a collaborative whiteboarding tool that allows users to sketch, plan, and share ideas in real-time. This project provides a flexible and intuitive interface for teams to brainstorm and visualize their thoughts together.
 
-First, run the development server:
+## Project Features
+
+- **Real-time Collaboration**: Work together with your team in real-time.
+- **Customizable Canvas**: Draw, sketch, and plan using various tools and colors.
+- **Drag-and-Drop Elements**: Easily organize your sketches with drag-and-drop functionality.
+- **User Presence**: See who is online and actively collaborating.
+- **Version Control**: Track changes and revert to previous versions if needed.
+- **Authentication**: Securely log in with Clerk authentication.
+- **Responsive Design**: Optimized for both desktop and mobile devices.
+
+## Technologies Used
+
+- **Next.js**: Framework
+- **TypeScript**: Programming Language
+- **Liveblocks**: Real-time collaboration
+- **shadcn-ui**: Accessible UI components
+- **TanStack Query (React Query)**: Data fetching, caching, and synchronization
+- **Tailwind CSS**: Styling
+- **Zustand**: State management
+- **Clerk**: Authentication
+- **Lucide React**: Icon set
+- **Convex**: Backend logic and state management
+
+## Installation and Setup
+
+To run this project locally, follow these steps:
+
+### Install Dependencies
+
+First, install the required dependencies:
+
+```bash
+npm install
+```
+
+### Start the Development Server
+
+To run the app locally:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This will start the development server and open the app at http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+To create a production build:
 
-## Learn More
+```bash
+npm run build
+```
+## Commands
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **dev**: Starts the development server.
+- **build**: Builds the app for production.
+- **start**: Runs the app in production mode.
+- **lint**: Runs ESLint to check for code quality issues.
