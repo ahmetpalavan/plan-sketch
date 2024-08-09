@@ -40,7 +40,7 @@ export const RenameModal = () => {
       e.preventDefault();
       mutate();
     },
-    [mutate, title]
+    [mutate]
   );
 
   return (
