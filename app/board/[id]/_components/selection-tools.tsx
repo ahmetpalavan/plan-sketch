@@ -57,7 +57,7 @@ export const SelectionTools = memo(({ camera, setLastUsedColor }: SelectionTools
       const livelayers = storage.get('layerIds');
       const indices: number[] = [];
 
-      const arr = livelayers.toArray();
+      const arr = livelayers.toImmutable();
 
       for (let i = 0; i < livelayers.length; i++) {
         if (self?.includes(arr[i])) {
