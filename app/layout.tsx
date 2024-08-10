@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { ConvexClientProvider } from '~/providers/convex-client-provider';
-import './globals.css';
-import { ThemeProvider } from '~/providers/theme-provider';
 import { Toaster } from '~/components/ui/sonner';
-import QueryProvider from '~/providers/query-provider';
+import { ConvexClientProvider } from '~/providers/convex-client-provider';
 import { ModalProvider } from '~/providers/modal-provider';
+import Providers from '~/providers/progress-provider';
+import QueryProvider from '~/providers/query-provider';
+import { ThemeProvider } from '~/providers/theme-provider';
+import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,7 +31,7 @@ export default function RootLayout({
             <QueryProvider>
               <ModalProvider />
               <Toaster richColors />
-              {children}
+              <Providers>{children}</Providers>
             </QueryProvider>
           </ConvexClientProvider>
         </ThemeProvider>
